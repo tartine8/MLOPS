@@ -1,7 +1,9 @@
 datasets==2.7.1
+fastapi==0.88.0
 fasttext-wheel
-string
-random
 kafka==2.0.2
-pandas==1.5.2
 numpy==1.23.5
+pandas==1.5.2
+random
+string
+typing
