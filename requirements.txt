@@ -1,0 +1,7 @@
+datasets==2.7.1
+fasttext-wheel
+string
+random
+kafka==2.0.2
+pandas==1.5.2
+numpy==1.23.5
