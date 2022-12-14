@@ -11,7 +11,7 @@ import pickle
 
 model = joblib.load('imdb_model.joblib')
 
-X_train = joblib.load('xtrain.joblib')
+X_train = pd.DataFrame({'text': joblib.load('xtrain.joblib')})
 new_data = pd.DataFrame({'text': []})
 with open('new_data.pkl', 'wb') as file:
     pickle.dump(new_data, file)
@@ -58,23 +58,24 @@ def get_new_data():
 
 
 # Drift
-async def get_auc(X_train, X_prod):
+def get_auc(X_train, X_prod):
     drift = SmartDrift(df_current=X_prod, df_baseline=X_train, deployed_model=model)
-    drift.compile(full_validation=True)
-    if drift.auc > 0.7:
-        print("THE MODEL MIGHT DRIFT")
-    else:
-        print("THE MODEL DOES NOT DRIFT")
+    drift.compile()
+    # if drift.auc > 0.7:
+    #     print("THE MODEL MIGHT DRIFT")
+    # else:
+    #     print("THE MODEL DOES NOT DRIFT")
 
 
 # Predictions
 @app.post('/predict')
 def predict_model(text: str, background_tasks: BackgroundTasks):
     background_tasks.add_task(write_new_data, text)
-    background_tasks.add_task(get_auc, new_data, X_train)
-    #new_data.loc[len(new_data)] = [text]
-    pred = model.predict(text)
-    return {'prediction': pred[0][0], 'confidence': pred[1][0]}
+    background_tasks.add_task(get_auc, X_train, new_data) 
+    new_data.loc[len(new_data)] = [text]
+    x_test = pd.DataFrame({"text": [text]})
+    pred = model.predict(x_test)
+    return {'prediction': int(pred[0])}
 
 async def predict_request(client):
     data = {'text': 'omg this movie was incredible'}
