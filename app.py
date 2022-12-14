@@ -3,14 +3,15 @@ from fastapi import BackgroundTasks, FastAPI
 from time import time
 from typing import Union
 import asyncio
-import fasttext
 import httpx
+import joblib
 import pandas as pd
 import pickle
 
 
-model = fasttext.load_model('imdb_model.bin')
+model = joblib.load('imdb_model.joblib')
 
+X_train = joblib.load('xtrain.joblib')
 new_data = pd.DataFrame({'text': []})
 with open('new_data.pkl', 'wb') as file:
     pickle.dump(new_data, file)
@@ -70,7 +71,7 @@ async def get_auc(X_train, X_prod):
 @app.post('/predict')
 def predict_model(text: str, background_tasks: BackgroundTasks):
     background_tasks.add_task(write_new_data, text)
-    background_tasks.add_task(get_auc, 'new_data.pkl', 'train.txt')
+    background_tasks.add_task(get_auc, new_data, X_train)
     #new_data.loc[len(new_data)] = [text]
     pred = model.predict(text)
     return {'prediction': pred[0][0], 'confidence': pred[1][0]}
