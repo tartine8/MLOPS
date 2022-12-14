@@ -1,8 +1,8 @@
 asyncio
-datasets==2.7.1
 fastapi==0.88.0
-fasttext-wheel
 httpx==0.23.0
-numpy==1.23.5
+joblib==1.2.0
 pandas==1.5.2
+scikit-learn==1.2.0
 typing
+uvicorn[standard]==0.20.0
