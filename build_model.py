@@ -18,7 +18,6 @@ def build_model():
     print('score:', model.score(X_test, y_test))
 
     joblib.dump(model, 'model.joblib')
-    joblib.dump(X_train, 'xtrain.joblib')
     joblib.dump(X_test, 'xtest.joblib')
     joblib.dump(y_test, 'ytest.joblib')
 

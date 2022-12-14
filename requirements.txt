@@ -1,5 +1,6 @@
 asyncio
 fastapi==0.88.0
+fastapi-utils==0.2.1
 httpx==0.23.0
 joblib==1.2.0
 pandas==1.5.2
