@@ -1,4 +1,5 @@
 from sklearn.linear_model import LogisticRegression
+from lightgbm import LGBMRegressor
 from sklearn.model_selection import train_test_split
 import joblib
 import pandas as pd
@@ -18,5 +19,7 @@ def build_model():
 
     joblib.dump(model, 'model.joblib')
     joblib.dump(X_train, 'xtrain.joblib')
+    joblib.dump(X_test, 'xtest.joblib')
+    joblib.dump(y_test, 'ytest.joblib')
 
 build_model()
